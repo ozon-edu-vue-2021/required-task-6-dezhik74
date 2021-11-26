@@ -10,6 +10,7 @@
           <sorter-icon
             :headerItem="headerItem"
             v-on:changeSorting="$emit('changeSorting', $event)"
+            v-on:fiterTextChanged="$emit('fiterTextChanged', $event)"
           />
         </th>
       </thead>

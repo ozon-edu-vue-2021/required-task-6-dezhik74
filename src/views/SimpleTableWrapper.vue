@@ -15,6 +15,7 @@
       :header="header"
       v-on:getPage="getPage"
       v-on:changeSorting="changeSorting"
+      v-on:fiterTextChanged="fiterTextChanged"
       :totalPages="totalPages"
       :currentPage="currentPage"
       :staticPaging="staticPaging"
@@ -34,11 +35,41 @@ export default {
   data() {
     return {
       header: [
-        { columnID: "postId", ordance: "none", priority: 0 },
-        { columnID: "id", ordance: "none", priority: 0 },
-        { columnID: "name", ordance: "none", priority: 0 },
-        { columnID: "email", ordance: "none", priority: 0 },
-        { columnID: "body", ordance: "none", priority: 0 },
+        {
+          columnID: "postId",
+          ordance: "none",
+          priority: 0,
+          filtered: true,
+          filterText: "",
+        },
+        {
+          columnID: "id",
+          ordance: "none",
+          priority: 0,
+          filtered: false,
+          filterText: "",
+        },
+        {
+          columnID: "name",
+          ordance: "none",
+          priority: 0,
+          filtered: false,
+          filterText: "",
+        },
+        {
+          columnID: "email",
+          ordance: "none",
+          priority: 0,
+          filtered: true,
+          filterText: "",
+        },
+        {
+          columnID: "body",
+          ordance: "none",
+          priority: 0,
+          filtered: false,
+          filterText: "",
+        },
       ],
       rows: [], // строки, которые идут в таблицу
       changedData: [], //отсортированные и отфильтрованные данные
@@ -112,18 +143,47 @@ export default {
             }
           });
       }
-      this.changedData = orderBy(
-        this.changedData,
-        headerItem.columnID,
-        headerItem.ordance
-      );
+      this.sortByPriority();
       this.getPage(1);
     },
-    clearChanges() {
-      // console.log("clear sorting");
+    sortByPriority() {
+      // Такая сортировка только из-за того, что ручка одна и данные уже на клиенте!!!
+      const sortedPriority = orderBy(this.header, "columnID", "asc");
+      sortedPriority.forEach((elem) => {
+        if (elem.priority > 0) {
+          this.changedData = orderBy(
+            this.changedData,
+            elem.columnID,
+            elem.ordance
+          );
+        }
+      });
+    },
+    fiterTextChanged({ col, value }) {
+      // Такое фильтрование только из-за того, что ручка одна и данные уже на клиенте!!!
+      // console.log("filter column: ", col, " filter text ", value);
+      this.clearChangeData();
+      this.changedData = this.changedData.filter((row) => {
+        if (value === "") {
+          return true;
+        }
+        if (typeof row[col] === "number") {
+          return row[col] === Number(value);
+        } else {
+          return row[col].toUpperCase().includes(value.toUpperCase());
+        }
+      });
+      this.totalPages = Math.ceil(this.changedData.length / this.pageSize);
+      this.sortByPriority();
+      this.getPage(1);
+    },
+    clearChangeData() {
       this.changedData = [];
       this.originalData.map((el) => this.changedData.push(el));
-      this.totalPages = Number(this.changedData.length / this.pageSize);
+    },
+    clearChanges() {
+      this.clearChangeData();
+      this.totalPages = Math.ceil(this.changedData.length / this.pageSize);
       this.staticPaging = true;
       this.header.map((item) => {
         item.priority = 0;

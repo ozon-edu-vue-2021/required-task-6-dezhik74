@@ -1,21 +1,25 @@
 <template>
-  <span @click="changeState" class="icon">
-    {{ headerItem.columnID }}
-    <!-- {{ headerItem.ordance }} -->
-    <span v-if="headerItem.ordance === 'none'"></span>
-    <template v-if="headerItem.ordance === 'asc'">
-      <font-awesome-icon :icon="['fas', 'arrow-up']" />
-      <span class="priority">
-        {{ headerItem.priority }}
-      </span>
+  <div>
+    <span @click="changeState" class="icon">
+      {{ headerItem.columnID }}
+      <span v-if="headerItem.ordance === 'none'"></span>
+      <template v-if="headerItem.ordance === 'asc'">
+        <font-awesome-icon :icon="['fas', 'arrow-up']" />
+        <span class="priority">
+          {{ headerItem.priority }}
+        </span>
+      </template>
+      <template v-if="headerItem.ordance === 'desc'">
+        <font-awesome-icon :icon="['fas', 'arrow-down']" />
+        <span class="priority">
+          {{ headerItem.priority }}
+        </span>
+      </template>
+    </span>
+    <template v-if="headerItem.filtered">
+      <input type="text" @input="fiterTextChanged" @click.stop class="filter" />
     </template>
-    <template v-if="headerItem.ordance === 'desc'">
-      <font-awesome-icon :icon="['fas', 'arrow-down']" />
-      <span class="priority">
-        {{ headerItem.priority }}
-      </span>
-    </template>
-  </span>
+  </div>
 </template>
 
 <script>
@@ -36,6 +40,16 @@ export default {
   methods: {
     changeState() {
       this.$emit("changeSorting", this.headerItem.columnID);
+    },
+    callFilterDropDown() {
+      console.log("filter dr");
+    },
+    fiterTextChanged(e) {
+      // console.log("filter text", e.target.value);
+      this.$emit("fiterTextChanged", {
+        col: this.headerItem.columnID,
+        value: e.target.value,
+      });
     },
   },
 };
@@ -63,5 +77,10 @@ export default {
   width: 14px;
   height: 14px;
   margin-left: 4px;
+}
+
+.filter {
+  margin: auto;
+  width: 100%;
 }
 </style>
