@@ -25,12 +25,6 @@
 <script>
 export default {
   name: "SorterIcon",
-  data() {
-    return {
-      // state: "none",
-      // stateVariants: ["asc", "desc"],
-    };
-  },
   props: {
     headerItem: {
       type: Object,

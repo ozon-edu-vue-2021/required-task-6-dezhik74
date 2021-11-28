@@ -1,6 +1,6 @@
 <template>
   <section>
-    Простая таблица
+    Простая таблица с функциональными компонентами
     <hr />
     <label for="paging">Стаическая пагинация</label>
     <input
@@ -10,7 +10,7 @@
       @change="changeStaticPaging"
     />
     <button @click="clearChanges">Reset</button>
-    <simple-table
+    <simple-table-f
       :rows="rows"
       :header="header"
       v-on:getPage="getPage"
@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import SimpleTable from "../components/SimpleTable.vue";
+import SimpleTableF from "../components/SimpleTable-F.vue";
 import { orderBy } from "lodash/collection";
 
 export default {
-  name: "SimpleTableWrapper",
+  name: "SimpleTableWrapperF",
   components: {
-    SimpleTable,
+    SimpleTableF,
   },
   data() {
     return {

@@ -2,9 +2,22 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">About</router-link>
-      <router-link to="/simple">Простая</router-link>
+      <router-link
+        :to="{ name: 'Simple', params: { originalData: this.rows } }"
+      >
+        Простая
+      </router-link>
+      <router-link
+        :to="{ name: 'SimpleF', params: { originalData: this.rows } }"
+      >
+        Простая-Ф
+      </router-link>
+      <router-link
+        :to="{ name: 'Virtual', params: { originalData: this.rows } }"
+        >Виртуальный скролл
+      </router-link>
     </div>
-    <router-view :originalData="rows" />
+    <router-view />
   </div>
 </template>
 

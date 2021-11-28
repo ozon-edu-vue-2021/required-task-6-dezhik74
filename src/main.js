@@ -11,11 +11,14 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 import { Directive } from "./directives/detect-viewport";
+import VueVirtualScroller from "vue-virtual-scroller";
 
 library.add(faArrowUp, faArrowDown, faFilter, faFunnelDollar);
 
 Vue.config.productionTip = false;
 Vue.directive("detect-viewport", Directive);
+
+Vue.use(VueVirtualScroller);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
